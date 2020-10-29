@@ -1,6 +1,6 @@
 jwebmail.conf
 lib/JWebmail.pm
-lib/JWebmail/Controller/All.pm
+lib/JWebmail/Controller/Webmail.pm
 lib/JWebmail/Model/ReadMails.pm
 lib/JWebmail/Model/Driver/Mock.pm
 lib/JWebmail/Model/Driver/QMailAuthuser/Extract.pm
@@ -15,7 +15,9 @@ LICENSE
 lang/de.lang
 lang/en.lang
 Makefile.PL
-t/All.t
+t/Webmail.t
+t/INI.t
+t/Helper.t
 script/jwebmail
 CREDITS
 MANIFEST
@@ -28,9 +30,9 @@ templates/_pagination1.html.ep
 templates/not_found_.html.ep
 templates/error.html.ep
 templates/layouts/mainlayout.html.ep
-templates/all/readmail.html.ep
-templates/all/writemail.html.ep
-templates/all/displayheaders.html.ep
-templates/all/about.html.ep
-templates/all/noaction.html.ep
+templates/webmail/readmail.html.ep
+templates/webmail/writemail.html.ep
+templates/webmail/displayheaders.html.ep
+templates/webmail/about.html.ep
+templates/webmail/noaction.html.ep
 templates/_pagination2.html.ep
