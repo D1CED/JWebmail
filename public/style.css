@@ -1,0 +1,347 @@
+:root {
+    --color-font: #000000;
+    --color-background: #DDDDDD;
+    --color-table-em: lightblue;
+    --color-table-em2: #D3DCE3;
+    --color-table-row: #EEEEEE;
+    --color-link: blue;
+    --color-link-visited: purple;
+    --color-link-hover: red;
+    --color-warning: orange;
+    --color-head: #002266;
+}
+
+
+/* GENERAL */
+body {
+    font-family: sans;
+}
+a:link {
+    text-decoration: none;
+    color: var(--color-link);
+}
+a:visited {
+    text-decoration: none;
+    color: var(--color-link-visited);
+}
+a:hover {
+    text-decoration: underline;
+    color: var(--color-link-hover);
+}
+footer {
+    margin-top: 50px;
+    text-align: center;
+    font-size: small;
+}
+caption {
+    vertical-align: middle;
+    font-size: large;
+    background-color: var(--color-background);
+    text-align: center;
+    font-weight: bold;
+}
+
+.ow h1 {
+    color: var(--color-background);
+    background-color: var(--color-head);
+    width: 80%;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.ow form,
+.ow dl {
+    width: 80%;
+    background-color: var(--color-background);
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.ow p.warn {
+    background-color: var(--color-warning);
+    text-align: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+
+    padding: 10px;
+}
+
+.ow nav {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    padding: 10px;
+    text-align: center;
+    background-color: var(--color-background);
+}
+
+div.show-body {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+iframe.html-mail {
+    width: 100%;
+    height: 400px;
+}
+
+a.btn {
+    padding: 5px;
+    /* margin: 4px; */
+    /* border-width: 5px; */
+    /* border-style: solid; */
+
+    color: var(--color-background);
+    background-color: var(--color-head);
+    border-color: var(--color-head);
+
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+}
+a.btn:hover {
+    background-color: #0060a0;
+    /* border-color: black; */
+}
+
+/* a.btn::before { content: '['; } */
+/* a.btn::after { content: ']'; } */
+
+
+/* NESTED */
+td.login-form input[type=text] {
+    width: 100%;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+
+/* CLASSES */
+table.top {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    width: 50%;
+    background-color: var(--color-background);
+}
+td.small-section {
+    text-align: center;
+    background-color: var(--color-background);
+}
+td.large-section {
+    vertical-align: middle;
+    background-color: var(--color-table-row);
+    width: 470;
+}
+p.center {
+    text-align: center;
+}
+td.login-form {
+    valign: middle;
+    align: center;
+    background-color: var(--color-table-row);
+}
+tr.submit-row {
+    text-align: right;
+}
+td.label-cell {
+    text-align: right;
+}
+td.warning {
+    background-color: var(--color-warning);
+    text-align: center;
+}
+p.languages {
+    color: var(--color-link);
+}
+td.sep {
+    bgcolor: #ffffff;
+}
+td.sort-param {
+    valign: middle;
+    width: 12%;
+    bgcolor: var(--color-table-em2);
+}
+input.field-with-error {
+    border: 2px solid red;
+    border-radius: 4px;
+}
+.alter-font {
+    font-family: serif;
+}
+strong.up {
+    text-transform: uppercase;
+    color: var(--color-background);
+}
+a.bright {
+    color: #ffffff;
+}
+td.folder-list {
+    align: left;
+    width: 33%;
+    color: #ffffff;
+    size: 3; 
+}
+em.msg-count {
+    color: #ffffff;
+    size: 3; 
+    font-family: serif;
+}
+
+ul.line {
+    list-style-type: none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    /* padding: 0; */
+}
+ul.line > li:not(:last-child)::after {
+    /* border-right: 2px solid var(--color-font); */
+    color: var(--color-background);
+    content: "|";
+    margin: 0 .25em;
+}
+ul.line > li {
+    /* float: left; */
+    display: inline;
+}
+
+div.show-body {
+    background-color: var(--color-table-row);
+}
+
+td.new-mail > tr {
+    font-weight: bold;
+}
+
+
+/* IDS */
+th#top-section {
+    background-color: var(--color-background);
+}
+td#main-version {
+    font-size: large;
+    font-weight: bold;
+}
+table#noaction {
+    border: 0;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    width: 300px;
+}
+tr#bottom-section {
+    background-color: var(--color-background);
+}
+table#displayheaders {
+    width: 95%;
+    cellpadding: 1;
+    cellspacing: 1;
+    border: 0;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-top: 100px; */
+    /* width: 300px; */
+}
+table#displayheaders tfoot {
+    background-color: var(--color-background);
+}
+tr#sort {
+    background-color: var(--color-table-em2);
+}
+td#loginmessage {
+    bgcolor: var(--color-table-em);
+    align: center;
+    size: 2;
+}
+td#navigation {
+    bgcolor: #dcdcdc;
+}
+
+table#bot-nav {
+    text-align: center;
+    vertical-align: middle;
+}
+
+table#bot-nav > tbody > tr > td:nth-child(2) {
+    /* text-align: right; */
+    /* float: left; */
+    /* vertical-align: middle; */
+}
+
+table#display-folders {
+    background-color: var(--color-head);
+    align: center;
+}
+
+table#mail-headers {
+    border-collapse: collapse;
+}
+table#mail-headers td {
+    padding: 5px;
+}
+table#mail-headers > tbody > tr > td:nth-child(1) {
+    text-align: right;
+}
+table#mail-headers > tbody > tr > td:nth-child(3) {
+    text-align: center;
+}
+table#mail-headers > tbody > tr > td:nth-child(6) {
+    text-align: right;
+}
+table#mail-headers > tbody > tr > td:nth-child(7) {
+    text-align: center;
+}
+table#mail-headers > tbody > tr {
+    background-color: var(--color-table-row);
+}
+table#mail-headers > tbody > tr:nth-child(even) {
+    background-color: var(--color-background);
+}
+
+td#pag2 {
+    white-space: nowrap;
+}
+
+dl#show-head {
+    background-color: var(--color-background);
+}
+
+form#move-mail {
+    display: inline;
+}
+
+#pag2 > form {
+    display: inline;
+}
+
+td#navigation {
+    background-color: var(--color-background);
+}
+
+form#write-form > label {
+    display: block;
+}
+
+p#empty {
+    background-color: var(--color-table-em2);
+    padding: 25px 0 25px 1cm;
+    margin: 0;
+}
+
+
+/* ANIMATIONS */
+.flash-fade {
+    animation-duration: 5s;
+    animation-name: fade;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+@keyframes fade {
+    0%   { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}

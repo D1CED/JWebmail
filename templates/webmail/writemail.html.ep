@@ -1,0 +1,50 @@
+% layout 'mainlayout';
+
+<div class=ow>
+
+<h1>Write Message</h1>
+
+% if (my $msg = stash('warning')) {
+  <p class=warn> <%= $msg %> </p>
+% }
+
+<form method=post enctype=multipart/form-data id=write-form>
+
+  <label for=mail> <%= ucfirst l 'send_to' %> </label>
+  %= email_field 'to', id => 'mail', multiple => '', required => ''
+  <br>
+
+  <label for=subject> <%= ucfirst l 'subject' %> </label>
+  %= text_field 'subject', 'required' => ''
+  <br>
+
+  <label for=cc>CC</label>
+  %= email_field 'cc', 'multiple' => ''
+  <br>
+
+  <label for=bcc>BCC</label>
+  %= email_field 'bcc', 'multiple' => ''
+  <br>
+
+  <label for=back_to> <%= ucfirst l 'answer_to' %> </label>
+  %= email_field 'back_to'
+  <br>
+
+  <label for=txt> <%= ucfirst l 'content' %> </label>
+  %= text_area 'body', cols => 80, rows => 24, id => 'txt'
+  <br>
+
+  %= file_field 'attach'
+  <br>
+
+  <input type=submit value="send" />
+
+  %= csrf_field
+
+</form>
+
+<nav>
+<a href="<%= url_for('displayheaders') %>" class=btn> <%= l 'home' %> </a>
+</nav>
+
+</div>

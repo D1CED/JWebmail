@@ -1,0 +1,27 @@
+<html>
+
+  <head>
+    <title>Error</title>
+  </head>
+
+  <body>
+    <h1>Error</h1>
+    <p class=center>
+% if (my $msg = stash 'error') {
+%= $msg
+% }
+% else {
+    Uwu :(
+% }
+    </p>
+% if (my $see_other = stash 'links') {
+  See:
+    <nav>
+  % for (@$see_other) {
+    <a href="<%= $_ %>"> <%= $_ %> </a><br>
+  % }
+    </nav>
+% }
+  </body>
+
+</html>

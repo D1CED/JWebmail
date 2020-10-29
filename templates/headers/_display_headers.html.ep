@@ -1,0 +1,94 @@
+% my $sort_param = begin
+  % my $param = shift;
+
+  <th class=sort-param>
+    <a href="<%= url_with->query(sort => (param('sort') || '') eq $param ? '!' . $param : $param) %>">
+      % no warnings qw(experimental::smartmatch);
+      %= do { given (param('sort')) { '↑' when ($param); '↓' when ('!' . $param) } }
+      %= ucfirst l $param;
+    </a>
+  </th>
+
+% end
+
+<table id=mail-headers>
+
+  <colgroup>
+    <col width=5% />
+    <col width=10% />
+    <col width=15% />
+    <col width=25% />
+    <col width=25% />
+    <col width=10% />
+    <col width=10% />
+  </colgroup>
+
+  <thead>
+    <tr id=sort>
+      <th> <%= ucfirst l 'nr' %> </th>
+
+      %= $sort_param->('status');
+
+      %= $sort_param->('date');
+
+
+    % if ($folder ne "SENT") {
+      %= $sort_param->('sender');
+    % } else {
+      <th class=sort-param>
+        <a href="<%= url_with->query(sort => param('sort') ne '!sender' ? 'sender' : '!sender' ) %>">
+        <%= ucfirst l 'recipient' %>
+        % if (param('sort') eq "sender") {
+            <IMG SRC="/down.gif" width="12" height="12" border="0" alt="v">
+        % } elsif (param('sort') eq "recipient_rev") {
+            <IMG SRC="/up.gif" width="12" height="12" border="0" alt="^">
+        % }
+        </a>
+      </th>
+    % }
+
+      %= $sort_param->('subject');
+
+      %= $sort_param->('size');
+
+      <th>
+        <!-- <img src="/chkb.gif"> -->
+        <input type=checkbox checked=1 disabled=1>
+      </th>
+    </tr>
+  </thead>
+
+
+  <tbody>
+  % foreach my $msgnum ($first_item .. $last_item) {
+  %   my $msg = $msgs->[$msgnum - $first_item];
+
+    <tr class="<%= $msg->{new} ? 'new-mail' : '' %>" id="<%= $msg->{mid} %>" >
+      <td>
+        %= $msgnum
+      </td>
+      <td>
+        %= ucfirst($msg->{is_multipart} ? l('yes') : l('no'));
+      </td>
+      <td>
+        % sub d { qr/([[:digit:]]{$_[0]})/ }
+        % my ($year,$mon,$mday,$hour,$min,$sec) = $msg->{date} =~ m/@{[d(4).'-'.d(2).'-'.d(2).'T'.d(2).':'.d(2).':'.d(2).'Z']}/;
+        %= join('/', $mday, $mon, $year) . " $hour:$min";
+      </td>
+      <td>
+        %= $msg->{from}->[0]->{name} || $msg->{from}->[0]->{email};
+      </td>
+      <td>
+        <a href="<%= url_for('read', id => $msg->{mid}) %>"> <%= $msg->{subject} || '_' %> </a>
+      </td>
+      <td>
+        %= print_sizes10 $msg->{size};
+      </td>
+      <td>
+        <input type=checkbox name=mail value="<%= $msg->{mid} %>" form=move-mail>
+      </td>
+    </tr>
+
+  % }
+  </tbody>
+</table>

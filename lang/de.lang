@@ -1,0 +1,51 @@
+login = anmelden
+userid = nuzerkennung
+passwd = passwort
+failed = fehlgeschlagen
+about = über
+mbox_size = Mailboxgröße
+and = und
+subject = betreff
+version = version
+from = von
+to = für
+cc = CC
+date = datum
+size = größe
+content-type = inhaltsart
+send_to = senden an
+answer_to = Antworten gehen an
+content = inhalt
+check_all = alle markieren
+move = verschieben
+nr = nummer
+status = status
+logout = abmelden
+compose = schreiben
+search = suche
+of = von
+messages = nachrichten
+new = neu
+mbox_size = mailboxgröße
+home = Übersicht
+no = nein
+yes = ja
+page = seite
+next = nächste
+last = letzte
+first = erste
+previous = vorherige
+sender = gesendet von
+
+# Mailboxen
+Queue = Warteschlange
+Drafts = Vorlagen
+Home = Wurzelverzeichnis
+
+# Fehler
+no_session = Keine aktive Sitzung.
+no_folder = Dieses Verzeichnis gibt es nicht.
+error_send = Die Nachricht konnte nicht gesendet werden.
+succ_send = Die Nachricht wurde verschikt.
+succ_move = Nachrichten wurden verschoben.
+empty_folder = Dies Verzeichnis ist leer.

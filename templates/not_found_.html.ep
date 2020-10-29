@@ -1,0 +1,16 @@
+<html>
+
+  <head>
+    <title>Not Found</title>
+  </head>
+
+  <body>
+    <p class=center>
+      Not the page you are looking for.
+    </p>
+    <p class=center>
+      Go back or go to the <a href="<%= url_for 'noaction' %>">start page</a>.
+    </p>
+  </body>
+
+</html>

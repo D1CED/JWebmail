@@ -1,0 +1,60 @@
+% layout 'mainlayout';
+
+<table id=noaction>
+  <thead>
+    <tr>
+      <th id=top-section> JWebmail – <%= ucfirst l 'login' %> </th>
+    </tr>
+  </thead>
+
+  <tbody>
+% if (my $msg = flash('message') || stash('warning')) {
+    <tr>
+      <td class="warning flash-fade">
+        %= $msg
+      <td>
+    </tr>
+% }
+
+    <tr>
+      <td class=login-form>
+        <form method=post name=login1 action="<%= url_for('login') %>">
+
+          <table>
+            <tr>
+              <td class=label-cell>
+                <label for=userid><%= ucfirst l 'userid' %></label>:
+              </td> 
+              <td> 
+                %= text_field 'userid'
+              </td>
+            </tr>
+            <tr>
+              <td class=label-cell> 
+                <label for=password><%= ucfirst l 'passwd' %></label>:
+              </td> 
+              <td> 
+                %= password_field 'password'
+              </td> 
+            </tr>
+            <tr class=submit-row>
+              <td colspan=2> 
+                <input type=submit value="<%= l 'login' %>">
+              </td> 
+            </tr>
+          </table>
+
+        </form>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+%= javascript begin
+  if (!document.login1.userid.value) {
+    document.login1.userid.focus();
+  } else {
+    document.login1.password.focus();
+  }
+% end

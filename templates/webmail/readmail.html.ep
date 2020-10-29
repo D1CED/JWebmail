@@ -1,0 +1,52 @@
+% layout 'mainlayout';
+
+% my $mail_fmt = begin
+  % my ($category, $value) = @_;
+  <dt> <%= ucfirst l $category %> </dt>
+  <dd> <%= ref $value ? join(' ' . l('and') . ' ', map {"$_->{name} <$_->{address}>"} @$value) : $value %> </dd>
+% end
+
+<div class=ow>
+
+<h1>Read Mail</h1>
+
+<dl id=show-head>
+  <dt> <%= uc l 'subject' %> </dt>
+  <dd> <%= $msg->{subject} %> </dd>
+%= $mail_fmt->('from', $msg->{from});
+%= $mail_fmt->('to', $msg->{to});
+%= $mail_fmt->('cc', $msg->{cc}) if !ref $msg->{cc} || @{ $msg->{cc} };
+%= $mail_fmt->('bcc', $msg->{bcc}) if !ref $msg->{bcc} || @{ $msg->{cc} };
+  <dt> <%= uc l 'date' %> </dt>
+  <dd> <%= $msg->{date} %> </dd>
+  <dt> <%= uc l 'size' %> </dt>
+  <dd> <%= print_sizes10 $msg->{size} %> </dd>
+  <dt> <%= uc l 'content-type' %> </dt>
+  <dd> <%= $msg->{content_type} %> </dd>
+</dl>
+
+% my $body = $msg->{body};
+
+% if ($msg->{content_type} eq 'multipart/alternative') {
+%   for (reverse @$body) {
+      <div class=show-body>
+%       my $x = mime_render($_->{type}, $_->{val});
+%==     $x;
+%       last if $x;
+      </div>
+%   }
+% }
+% elsif (ref $body eq 'HASH') {
+%   for (%$body) {
+      <div class=show-body>
+%==     mime_render($_->{type}, $_->{val});
+      </div>
+%   }
+% }
+% else {
+    <div class=show-body>
+%==   mime_render($msg->{content_type}, $body);
+    </div>
+% }
+
+</div>

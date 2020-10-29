@@ -1,0 +1,45 @@
+<table id=bot-nav width=100%>
+
+  <colgroup>
+    <col width=70% />
+    <col width=10% />
+    <col width=20% />
+  </colgroup>
+
+  <tr>
+    <td>
+      %= include '_pagination1';
+    </td>
+
+    <td>
+      <label for=allbox><%= l 'check_all' %>: </label>
+      <input name=allbox type=checkbox onclick="check_all(this);">
+    </td>
+
+    <td>
+      <form id=move-mail action="<%= url_for('move') %>" method=post>
+        <label for=select-folder> <%= l('move') . ' ' . l('to') %> </label>
+        <select name=folder id=select-folder>
+          %== "<option value='$_'>$_</option>" for grep {$_ ne $folder} @$mail_folders;
+        </select>
+
+        %= csrf_field
+
+        <input type="submit" value="<%= l 'move' %>">
+      </form>
+
+    </td>
+  </tr>
+</table>
+
+
+<script>
+function check_all(box) {
+    const setTo = box.checked;
+    const mails = document.getElementById('mail-headers').tBodies[0].rows;
+
+    for (const m of mails) {
+        m.lastElementChild.children[0].checked = setTo;
+    }
+}
+</script>

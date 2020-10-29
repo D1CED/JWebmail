@@ -1,0 +1,33 @@
+<table width=100%>
+  <tr>
+
+    <td>
+      <ul class=line>
+      %# <a href="<%= url_with($prefsurl) %>"><%= TXT 'userconfig' %></a>
+      %# <a href="<%=$prefsurl%>?action=editaddresses&folder=<%=$folder%>&sessionid=<%=$thissession%>&sort=<%=$sort%>&firstmessage=<%=$firstmessage+1%>&lang=<%=$lang%>" ><%= TXT 'addressbook' %></a>
+        <li>
+          <a href="<%= url_for('logout') %>"><%= ucfirst l 'logout' %></a>
+        </li>
+        <li>
+          <a href="<%= url_for('write') %>" ><%= ucfirst l 'compose' %></a>
+        </li>
+      </ul>
+    </td>
+
+    <td>
+      <form action="<%= url_for %>">
+        <label for=search><%= ucfirst l 'search' %></label>: <input type=search name=search size=8>
+      </form>
+    </td>
+
+    <td id=pag2>
+      %= include '_pagination2';
+    </td>
+
+    <td>
+      <!-- delete button -->
+      %# <form action="<%= url_for('delete_msg') %>" name=Formdel onsubmit="return confirm('<%= TXT q(js_confirm_delete) %>')" > </form>
+    </td>
+
+  </tr>
+</table>

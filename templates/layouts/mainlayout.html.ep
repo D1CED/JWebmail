@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<meta charset=UTF-8>
+
+<html lang="<%= $lang %>">
+  <head>
+    <title> <%= stash('title') || 'JWebmail' %> </title>
+    <link href="/style.css" rel=stylesheet>
+  </head>
+
+  <body>
+    %= content
+
+    <footer>
+      <a href="<%= url_for('about') %>">
+        <%= ucfirst l 'about' %> JWebmail
+      </a>
+      <br/>
+      <%= ucfirst l 'version' %> <%= $version %>
+    </footer>
+  </body>
+</html>

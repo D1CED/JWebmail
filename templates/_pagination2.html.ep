@@ -1,0 +1,19 @@
+<a href="<%= url_with->query({start => $first_page->[0]-1}) %>"> <img src="/first.gif" alt="<%= l('first') . ' ' . l 'page' %>"></a>\
+<a href="<%= url_with->query({start => $prev_page->[0]-1}) %>"> <img src="/left.gif" alt="<%= l('previous') . ' ' . l 'page' %>"> </a>\
+
+<form>
+  [<label for=custompage><%= ucfirst l 'page' %></label>
+  <input type=number name=start id=custompage placeholder="<%= $current_page %>" size=3 />
+  <%= l 'of' %> <%= $total_pages %>]
+
+% my $h = $c->req->query_params->to_hash;
+% while (my ($k, $v) = each %$h) {
+%   if ($k ne 'start') {
+  <input type=hidden name="<%=$k%>" value="<%=$v%>" />
+%   }
+% }
+
+</form>\
+
+<a href="<%= url_with->query({start => $next_page->[0]-1}) %>"> <img src="/right.gif" alt="<%= l('next') . ' ' . l 'page' %>"> </a>\
+<a href="<%= url_with->query({start => $last_page->[0]-1}) %>"> <img src="/last.gif" alt="<%= l('last') . ' ' . l('page') %>"> </a>

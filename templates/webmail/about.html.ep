@@ -1,0 +1,71 @@
+%# about template
+
+% layout 'mainlayout';
+
+<table class=top>
+
+  <tr>
+    <th>
+      About JWebmail <%= $version %>
+    </th>
+  </tr>
+
+  <tr>
+    <td class=large-section>
+      <ul>
+        <li>
+          JWebmail <%= $version %> is a Webmail solution meant to be used with
+          <a href="https://www.fehcom.de/sqmail/sqmail.html">s/qmail</a>
+        </li>
+
+        <li>Features:
+          <ul>
+            <!--
+              <li>qmail, vmailmgr and vpopmail authentication support (<em>not</em> sendmail)</li>
+              <li>multiple signatures und headers support</li>
+              <li>basic folders support (4 defined folders)</li>
+              <li>featured addressbook</li>
+              <li>100% Maildir based</li>
+              <li>reads the mail directely from the server disk, without need for POP3 or IMAP</li>
+            -->
+            <li>multiple language support</li>
+            <li>session management </li>
+            <li>search for mails</li>
+            <li>CGI support but also psgi/plack and fcgi</li>
+          </ul>
+        </li>
+
+        <li>
+          This is a
+          <a href="http://www.gnu.org/copyleft/gpl.html" target="_new">GPL</a>
+          licensed project, created by <a href="mailto:">Oliver 'omnis' Müller</a>
+          and currently maintained by
+          <a href="mailto:jannis@fehcom.de">Jannis M. Hoffmann</a>
+        </li>
+           
+
+        <li>Supported languages:
+          <p class=languages>
+% foreach (@$languages) {
+            <%= $_ %>
+% }
+          </p>
+        </li>
+
+        <li>
+          JWebmail is programmed in <a href="http://www.perl.org">Perl</a>, and is
+          a complete rewrite of oMail-webmail.
+        </li>
+
+      </ul>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <nav>
+        <a href="<%= url_for('noaction') %>" class=btn>login</a>
+      </nav>
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,87 @@
+=encoding utf-8
+
+=head1 SYNOPSIS
+
+  @@ de.lang
+  yes = ja
+  no = nein
+
+=head1 DESCRIPTION
+
+Place your translation files here.
+Use the two letter language naming convention.
+Use lower case phrases as they will be capitalized by the templates.
+
+=head1 INTERNATIONALIZATION AND LOCALIZATION
+
+=head2 Single Words
+
+  Phrase         Description
+  --------------------------
+  failed         an operation failed
+  and
+  no
+  yes
+  messages       mails
+  of             page x *of* n
+  page           a page consisting of multiple mails
+  login          header name
+  userid         form field label
+  passwd         form field label
+  about          about page name
+  mbox_size      mail box size in byte
+  version        version translation for JWebmail version
+  subject        mail field subject
+  from           mail field from
+  to             mail field to
+  cc             mail field cc
+  date           mail field date
+  size           mail size
+  content-type   mail field content-type
+  sender         mail field sender
+  answer_to      mail field reply back to
+  send_to        write mail to       
+  content        the mail body rendered as html
+  check_all      tick/untick all mails for move
+  move           move mails to a different folder
+  nr             row number, column description
+  status         whether a mail is multipart
+  logout         close session
+  compose        write an email
+  search         search in mails
+  new            amount of new mails
+  home           back button to read the main folder
+  first          first page
+  previous       previous page
+  next           next page
+  last           last page
+
+=head2 Phrases
+
+  succ_send      tell the user the mail was send successfully
+  succ_move      tell the user the mails where moved successfully
+  empty_folder   tell the user the folder is empty
+
+=head2 Error Messages
+
+  no_session   the session has expired or did not exist at all
+  no_folder    the selected mail folder does not exists
+  error_send   error sending the message
+
+=head2 Formats
+
+Currently there are no formats.
+
+=head2 Other
+
+  Common Mail Folders
+  ---
+  Queue
+  Drafts
+  Home
+
+=head1 SEE OTHER
+
+L<JWebmail::Plugin::I18N>
+
+=cut

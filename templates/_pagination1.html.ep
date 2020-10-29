@@ -1,0 +1,5 @@
+<a href="<%= url_with->query({start => $prev_page->[0]-1}) %>"><img src="/left.gif" alt="←"></a>
+<a href="<%= url_with->query({start => $first_page->[0]-1}) %>"><img src="/first.gif" alt="↞"></a>
+[<%= join(' ', ucfirst l('page'), $current_page, l('of'), $total_pages) %>]
+<a href="<%= url_with->query({start => $last_page->[0]-1}) %>"><img src="/last.gif" alt="↠"></a>
+<a href="<%= url_with->query({start => $next_page->[0]-1}) %>"><img src="/right.gif" alt="→"></a>

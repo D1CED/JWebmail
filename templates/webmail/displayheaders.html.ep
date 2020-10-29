@@ -1,0 +1,46 @@
+% layout 'mainlayout';
+
+<table id=displayheaders>
+
+  <thead>
+    <tr>
+      <td id=folders>
+        %= include 'headers/_displayfolders';
+      </td>
+    </tr>
+
+% if (my $loginmessage = stash 'loginmessage') {
+    <tr>
+      <td id=loginmessage> <%= $loginmessage %> </td>
+    </tr>
+% }
+
+    <tr>
+      <td id=navigation>
+        %= include 'headers/_display_top_nav';
+      </td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+% if (@$msgs) {
+        %= include 'headers/_display_headers';
+% }
+% else {
+        <p id=empty> <%= l 'empty_folder' %> </p>
+% }
+      </td>
+    </tr>
+  </tbody>
+
+  <tfoot>
+    <tr>
+      <td class=navigation>
+        %= include 'headers/_display_bot_nav';
+      </td>
+    </tr>
+  </tfoot>
+
+</table>

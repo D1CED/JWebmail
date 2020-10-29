@@ -1,0 +1,26 @@
+<table id=display-folders width=100%>
+  <tr>
+
+    <td id=folder-list class=alter-font>
+      <strong class=up> <%= l($folder) || $folder %> </strong>
+
+      <ul class=line>
+% for my $v (grep {$_ ne $folder} @$mail_folders) {
+  <li><a href="<%= url_for(folder => $v) %>" class=bright> <%= $v ne '' ? (l($v) || $v) : l 'Home' %> </a></li>
+% }
+      </ul>
+    </td>
+
+    <td>
+      <em class=msg-count>
+        <%= $first_item %>-<%= $last_item %> <%= l 'of' %> <%= $total_items %> <%= l 'messages' %>\
+        <%= ", $total_new_mails " . l('new') if $total_new_mails > 0; =%>
+
+% if ($total_size) {
+        - <%= ucfirst l('mbox_size') . ": " . print_sizes10 $total_size %>
+% }
+      </em>
+    </td>
+
+  </tr>
+</table>
