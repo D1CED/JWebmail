@@ -38,21 +38,20 @@ an external web server.
 
 v1.0.0 release plan
 -------------------
-* consider renaming, relicensing
+✓ consider renaming, relicensing
   ✓ License
     ✓ GPLv3+ and enter copyright info
     * Maybe the translation/documentation can be made available under a different
     * may relicense this under the AGPL.
-  * Rename
-    * jwebmail
-* make github ready
-  * create base configuration
-  * remove sensitive files
-  * add git vcs
+  ✓ Rename
+    ✓ JWebmail
+✓ make github ready
+  ✓ remove sensitive files (gitignore)
+  ✓ add git vcs
   ✓ remove part of the english translation
 * check legal requirements
-* INV: wrong subject being shown
 ✓ BUG: home not displaying
+✓ show new messages per folder
 ✓ BUG: empty folder not displaying correctly
 ✓ better documentation
   ✓ document i18n snippets
@@ -92,7 +91,6 @@ v1.0.0 release plan
   ✓ add switch disabling message send
   ✓ Extract: user to switch to
   ✓ Extract: adjustable maildir directory
-  * separate development and production configuration
 ✓ read secret from config file
 ✓ Extract: configurable perl lib
 ✓ Extract: encoding issues
@@ -127,51 +125,55 @@ v1.0.0 release plan
 
 v1.1.0 release plan
 -------------------
-* improve session data security
-  * improve server side session cleanup process coordination
-  * add a delete session function for s3d, maybe
-* improve i18n
-  * add localization of dates and time
+* INV: wrong subject being shown
+* INV: new mails are not highlighted
+* separate development and production configuration
+* create base configuration
+* improve server side session cleanup process coordination
+* add a delete session function for s3d, maybe
+* repurpose status field in displayheader
+* improve performance
+  * async read for extract
+  * async wait for send
+* consider using Crypt::URandom instead of Crypt::Random
+* consider using more mojo functions
+  * use Mojolicious::Types to replace File::Type
+* moving mails to other folders
+  * creating new folders
+  * backend
+* add more mime types
+  * jpeg
+  * png
+  * giv
+
+
+v1.2.0 release plan
+-------------------
 * advance ini config plugin
-  * BUG: toplevel section cant be an array
   * allow non-leaf nodes to be arrays
   * allow quotes
   * allow continuation over multiple lines
   * warn about overrides
   * add template support, maybe
-* repurpose status field in displayheader
+* improve i18n
+  * add localization of dates and time
 * better pagination
   * merge with partial templates, maybe
-
-
-v1.2.0 release plan
--------------------
+* improve performance, consider alternatives to Extract.pm
+  * based on Maildir::Light
 * add config validation
-* show new messages per folder
-* moving mails to other folders
-  * creating new folders
-  * backend
 * click on sender to answer
 * mobile optimize
 * download mail and attachments
 * cleanup css
 * allow multiple attachments
-* improve performance, consider alternatives to Extract.pm
-  * based on Maildir::Light
-* add more mime types
-  * jpeg
-  * png
-  * giv
 * consider using more mojo functions
   * base64
   * encoding
   * json
   * filepaths
   * dump
-  * Mojolicious::Types
   * mail?
-* consider using Crypt::URandom instead of Crypt::Random
-* improve session data security
 * add mails to Sent folder
 
 

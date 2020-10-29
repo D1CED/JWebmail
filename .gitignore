@@ -2,3 +2,4 @@ log/*
 MYMETA.*
 msg*.json
 Makefile
+*.tar.gz
