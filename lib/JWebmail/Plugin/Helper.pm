@@ -8,7 +8,7 @@ use Encode;
 use Mojo::Util 'xml_escape';
 use List::Util qw(min max);
 
-use constant TRUE_RANDOM => eval { require Crypt::Random; Crypt::Random->import('makerandom_octet'); 1 };
+use constant TRUE_RANDOM => eval { require Crypt::URandom; Crypt::URandom->import('urandom'); 1 };
 use constant HMAC => eval { require Digest::HMAC_MD5; Digest::HMAC_MD5->import('hmac_md5'); 1 };
 
 ### filter and checks for mojo validator
@@ -82,6 +82,21 @@ sub print_sizes2 {
     return round($var / (2**$expo)) . " $pref";
 }
 
+
+sub d { qr/([[:digit:]]{$_[0]})/ }
+
+sub parse_iso_date {
+    my @d = shift =~ m/@{[d(4).'-'.d(2).'-'.d(2).'T'.d(2).':'.d(2).':'.d(2).'Z']}/;
+    return {
+        year  => $d[0],
+        month => $d[1],
+        mday  => $d[2],
+        hour  => $d[3],
+        min   => $d[4],
+        sec   => $d[5],
+    };
+}
+
 ### mime type html render functions
 
 my $render_text_plain = sub {
@@ -122,18 +137,18 @@ use constant { S_PASSWD => 'pw', S_OTP_S3D_PW => 'otp_s3d_pw' };
 sub _rand_data {
     my $len = shift;
 
-    return makerandom_octet(Length => $len, Strength => 0);
-}
-
-sub _pseudo_rand_data {
-    my $len = shift;
-
-    my $res = '';
-    for (0..$len-1) {
-        vec($res, $_, 8) = int rand 256;
+    if (TRUE_RANDOM) {
+        #return makerandom_octet(Length => $len, Strength => 0); # was used for Crypt::Random
+        return urandom($len);
     }
+    else {
+        my $res = '';
+        for (0..$len-1) {
+            vec($res, $_, 8) = int rand 256;
+        }
 
-    return $res;
+        return $res;
+    }
 }
 
 sub session_passwd {
@@ -156,7 +171,7 @@ sub session_passwd {
             if (length $passwd < 20) {
                 $passwd .= "\n" . " " x (20 - length($passwd) - 1);
             }
-            my $rand_bytes = TRUE_RANDOM ? _rand_data(length $passwd) : _pseudo_rand_data(length $passwd);
+            my $rand_bytes = _rand_data(length $passwd);
             $c->s3d(S_PASSWD, encode_base64(encode('UTF-8', $passwd) ^ $rand_bytes, ''));
             $c->session(S_OTP_S3D_PW, encode_base64($rand_bytes, ''));
         }
@@ -281,6 +296,8 @@ sub register {
         # selective import
         $app->helper(print_sizes10  => sub { shift; print_sizes10(@_) })
             if 'print_sizes10' ~~ @import;
+        $app->helper(parse_iso_date => sub { shift; parse_iso_date(@_) })
+            if 'parse_iso_date' ~~ @import;
         $app->helper(print_sizes2  => sub { shift; print_sizes2(@_) })
             if 'print_sizes2' ~~ @import;
         $app->helper(mime_render    => \&mime_render)
@@ -296,6 +313,7 @@ sub register {
     }
     elsif (!$conf->{import}) { # default imports
         $app->helper(print_sizes10  => sub { shift; print_sizes10(@_) });
+        $app->helper(parse_iso_date => sub { shift; parse_iso_date(@_) });
         $app->helper(mime_render    => \&mime_render);
         $app->helper(session_passwd => \&session_passwd);
         $app->helper(paginate       => \&paginate);

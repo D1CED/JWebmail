@@ -71,9 +71,8 @@
         %= ucfirst($msg->{is_multipart} ? l('yes') : l('no'));
       </td>
       <td>
-        % sub d { qr/([[:digit:]]{$_[0]})/ }
-        % my ($year,$mon,$mday,$hour,$min,$sec) = $msg->{date} =~ m/@{[d(4).'-'.d(2).'-'.d(2).'T'.d(2).':'.d(2).':'.d(2).'Z']}/;
-        %= join('/', $mday, $mon, $year) . " $hour:$min";
+        % my $date = parse_iso_date $msg->{date};
+        %= join('/', $date->{mday}, $date->{month}, $date->{year}) . " $date->{hour}:$date->{min}";
       </td>
       <td>
         %= $msg->{from}->[0]->{name} || $msg->{from}->[0]->{email};
