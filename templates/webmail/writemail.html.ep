@@ -44,8 +44,8 @@
 </form>
 
 <nav>
-%#<a href="<%= url_for('displayheaders') %>" class=btn> <%= l 'home' %> </a>
-<a href="javascript:history.back()" class=btn> <%= l 'home' %> </a>
+  %#<a href="<%= url_for('displayheaders') %>" class=btn> <%= l 'home' %> </a>
+  <a href="javascript:history.back()" class=btn> <%= l 'home' %> </a>
 </nav>
 
 </div>
