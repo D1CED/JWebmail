@@ -147,6 +147,7 @@ sub register {
     $self->cleanup_files;
 
     $app->helper( s3d => sub { $self->s3d(@_) } );
+    $app->helper( s3d_close => sub { delete shift->session->{S_KEY()} } );
 }
 
 
@@ -202,5 +203,11 @@ Stores and retrieves values.
   $c->s3d(data => 'Hello, S3D');
   $c->s3d('data');
   $c->s3d->{data};
+
+=head2 s3d_close
+
+Session is closed. You will not have access to it any more.
+
+  $c->s3d_close;
 
 =cut
