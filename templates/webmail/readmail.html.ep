@@ -32,8 +32,8 @@
       <div class=show-body>
 %       my $x = mime_render($_->{type}, $_->{val});
 %==     $x;
-%       last if $x;
       </div>
+%       last if $x;
 %   }
 % }
 % elsif (ref $body eq 'HASH') {
@@ -48,5 +48,9 @@
 %==   mime_render($msg->{content_type}, $body);
     </div>
 % }
+
+<nav id=read-nav>
+  <a href="javascript:history.back()" class=btn> <%= l 'home' %> </a>
+</nav>
 
 </div>

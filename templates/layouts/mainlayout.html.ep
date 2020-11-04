@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<meta charset=UTF-8>
 
 <html lang="<%= $lang %>">
   <head>
+    <meta charset=UTF-8>
     <title> <%= stash('title') || 'JWebmail' %> </title>
     <link href="/style.css" rel=stylesheet>
   </head>
