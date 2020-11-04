@@ -2,14 +2,13 @@ package JWebmail::Plugin::Helper;
 
 use Mojo::Base 'Mojolicious::Plugin';
 
-use POSIX qw(floor round log ceil);
-use MIME::Base64;
-use Encode;
-use Mojo::Util 'xml_escape';
 use List::Util qw(min max);
+use Mojo::Util qw(encode decode b64_encode b64_decode xml_escape);
+use POSIX qw(floor round log ceil);
 
 use constant TRUE_RANDOM => eval { require Crypt::URandom; Crypt::URandom->import('urandom'); 1 };
 use constant HMAC => eval { require Digest::HMAC_MD5; Digest::HMAC_MD5->import('hmac_md5'); 1 };
+
 
 ### filter and checks for mojo validator
 
@@ -112,7 +111,7 @@ my $render_text_plain = sub {
 my $render_text_html = sub {
     my $c_ = shift;
 
-    return '<iframe src="' . $c_->url_for('rawid', id => $c_->stash('id'))->query(body => 'html') . '" class=html-mail />';
+    return '<iframe src="' . $c_->url_for('rawid', id => $c_->stash('id'))->query(body => 'html') . '" class=html-mail></iframe>';
 };
 
 
@@ -159,7 +158,7 @@ sub session_passwd {
 
     if (defined $passwd) { # set
         if ( HMAC && lc($c->config->{'session'}{secure} || 'none') eq 'cram' ) {
-            $c->session(S_PASSWD() => $passwd ? encode_base64(hmac_md5($passwd, $c->app->secrets->[0]), '') : '');
+            $c->session(S_PASSWD() => $passwd ? b64_encode(hmac_md5($passwd, $c->app->secrets->[0]), '') : '');
         }
         elsif (lc($c->config->{'session'}->{secure} || 'none') eq 's3d') {
             unless ($passwd) {
@@ -172,8 +171,8 @@ sub session_passwd {
                 $passwd .= "\n" . " " x (20 - length($passwd) - 1);
             }
             my $rand_bytes = _rand_data(length $passwd);
-            $c->s3d(S_PASSWD, encode_base64(encode('UTF-8', $passwd) ^ $rand_bytes, ''));
-            $c->session(S_OTP_S3D_PW, encode_base64($rand_bytes, ''));
+            $c->s3d(S_PASSWD, b64_encode(encode('UTF-8', $passwd) ^ $rand_bytes, ''));
+            $c->session(S_OTP_S3D_PW, b64_encode($rand_bytes, ''));
         }
         else {
             $c->session(S_PASSWD() => $passwd);
@@ -184,8 +183,8 @@ sub session_passwd {
             return ($c->app->secrets->[0], $c->session(S_PASSWD));
         }
         elsif (lc($c->config->{'session'}->{secure} || 'none') eq 's3d') {
-            my $pw = decode_base64($c->s3d(S_PASSWD) || '');
-            my $otp = decode_base64($c->session(S_OTP_S3D_PW) || '');
+            my $pw = b64_decode($c->s3d(S_PASSWD) || '');
+            my $otp = b64_decode($c->session(S_OTP_S3D_PW) || '');
             my ($res) = split "\n", decode('UTF-8', $pw ^ $otp), 2;
             return $res;
         }
