@@ -9,6 +9,7 @@ lib/JWebmail/Model/WriteMails.pm
 lib/JWebmail/Plugin/Helper.pm
 lib/JWebmail/Plugin/INIConfig.pm
 lib/JWebmail/Plugin/I18N.pm
+lib/JWebmail/Plugin/I18N2.pm
 lib/JWebmail/Plugin/ServerSideSessionData.pm
 README
 LICENSE

@@ -5,6 +5,7 @@ This is a rewrite of oMail by Oliver Müller <om@omnis.ch>.
 
 oMail has not seen much progress in the last two decades
 so my <jannis@fehcom.de> goal is to bring it up to date.
+OMail was tied to qmail. JWebmail is not so tightly bound.
 
 ## This includes:
 - Using a perl web framework and leave the deprecated CGI behind.
@@ -34,154 +35,6 @@ an external web server.
 ### Read
 - [ ] bounce
 - [ ] add links on email addresses in header : click = add into addressbook
-
-
-v1.0.0 release plan
--------------------
-✓ consider renaming, relicensing
-  ✓ License
-    ✓ GPLv3+ and enter copyright info
-    * Maybe the translation/documentation can be made available under a different
-    * may relicense this under the AGPL.
-  ✓ Rename
-    ✓ JWebmail
-✓ make github ready
-  ✓ remove sensitive files (gitignore)
-  ✓ add git vcs
-  ✓ remove part of the english translation
-* check legal requirements
-✓ BUG: home not displaying
-✓ show new messages per folder
-✓ BUG: empty folder not displaying correctly
-✓ better documentation
-  ✓ document i18n snippets
-  ✓ cleanup comments
-  ✓ list functionality for ReadMails#communicate
-  ✓ OMail 
-  ✓ OMail::Helper
-  ✓ OMail::Controller::All
-  ✓ OMail::Plugin::I18N
-  ✓ OMail::Plugin::INIConfig
-  ✓ OMail::Plugin::ServerSideSessionData
-  ✓ OMail::Model::WriteMails
-  ✓ OMail::Model::ReadMails
-  ✓ OMail::Model::Driver::QMailAuthuser
-  ✓ OMail::Model::Driver::QMailAuthuser::Extract
-✓ better pagination
-  ✓ BUG: pagination forward -> backward is shifting by 1 (page start needs to be decremented)
-  ✓ move out to helper
-  ✓ more generic names
-✓ advance ini config plugin
-  ✓ set global section to global scope 
-  ✓ introduce arrays
-  ✓ make nesting sections more explicit
-✓ write more tests
-  ✓ test pagination
-  ✓ test mail_line
-  ✓ test for ini parser
-  ✓ basic test for application
-✓ improve i18n
-  ✓ german translation
-  ✓ look into i18n configuration
-  ✓ remove TXT alias
-✓ more configuration (for model)
-  ✓ disable cram
-  ✓ select mock read model
-  ✓ lazy init for mock model
-  ✓ add switch disabling message send
-  ✓ Extract: user to switch to
-  ✓ Extract: adjustable maildir directory
-✓ read secret from config file
-✓ Extract: configurable perl lib
-✓ Extract: encoding issues
-✓ improve session data security
-  ✓ use a server side cookie implementation
-  ✓ use a one time pad
-  ✓ resolve server/client session duration issues
-  ✓ use cryptographically secure random data
-  ✓ hide password length
-✓ handle empty folders
-✓ logging support for Extract.pm
-✓ true perl 5.16 support
-✓ cpan build and deploy script
-✓ remove prefs
-✓ file upload for attachment
-  ✓ file type detection
-  ✓ move WriteMails from Email::Simple to Email::MIME
-✓ configuration as plugin (Mojo::Plugin::Config)
-✓ model as helpers, initialized in startup
-✓ send
-  ✓ multiple mails for cc etc.
-  * content-transfer encoding, research (currently 8bit)
-✓ better design for send and read
-  ✓ send 
-  ✓ read
-✓ sandbox html mails
-✓ i18n as ini files
-✓ rework mail folders
-✓ rewrite about
-✓ search in subject
-
-
-v1.1.0 release plan
--------------------
-* INV: wrong subject being shown
-* INV: new mails are not highlighted
-* separate development and production configuration
-* create base configuration
-* improve server side session cleanup process coordination
-* add a delete session function for s3d, maybe
-* repurpose status field in displayheader
-* improve performance
-  * async read for extract
-  * async wait for send
-* consider using Crypt::URandom instead of Crypt::Random
-* consider using more mojo functions
-  * use Mojolicious::Types to replace File::Type
-* moving mails to other folders
-  * creating new folders
-  * backend
-* add more mime types
-  * jpeg
-  * png
-  * giv
-
-
-v1.2.0 release plan
--------------------
-* advance ini config plugin
-  * allow non-leaf nodes to be arrays
-  * allow quotes
-  * allow continuation over multiple lines
-  * warn about overrides
-  * add template support, maybe
-* improve i18n
-  * add localization of dates and time
-* better pagination
-  * merge with partial templates, maybe
-* improve performance, consider alternatives to Extract.pm
-  * based on Maildir::Light
-* add config validation
-* click on sender to answer
-* mobile optimize
-* download mail and attachments
-* cleanup css
-* allow multiple attachments
-* consider using more mojo functions
-  * base64
-  * encoding
-  * json
-  * filepaths
-  * dump
-  * mail?
-* add mails to Sent folder
-
-
-v1.3.0 release plan
--------------------
-* smtp send model, maybe
-* pop read model, maybe
-* add icons for navigation
 
 
 Posts
@@ -222,6 +75,9 @@ route that has the language as parameter. But omitting the language leads to pro
 
 One can use a redirect on root. Very easy but also not very effective.
 
+I am now using a global route containing the language after the changes to
+matching have been published. No need to monkey_patch and it works well enough.
+
 
 Concepts
 --------
@@ -247,9 +103,7 @@ Dependencies
 - M & V
   - Mojolicious
   - Config::Tiny
-  - Digest::HMAC_MD5 (optional)
-  - File::Type
-  - Crypt::Random
+  - Crypt::URandom
 - C
   - Mail::Box::Manager
   - Email::MIME
