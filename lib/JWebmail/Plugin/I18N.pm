@@ -6,6 +6,8 @@ use Mojolicious::Controller;
 use Mojo::File;
 use Mojo::Util 'monkey_patch';
 
+use Config::Tiny;
+
 
 has '_language_loaded' => sub { {} };
 

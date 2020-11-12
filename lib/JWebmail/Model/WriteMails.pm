@@ -6,7 +6,6 @@ use utf8;
 
 use Exporter 'import';
 our @EXPORT_OK = qw(sendmail);
-use Data::Dumper;
 
 use Email::MIME;
 

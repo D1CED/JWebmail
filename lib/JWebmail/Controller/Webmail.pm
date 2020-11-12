@@ -2,7 +2,7 @@ package JWebmail::Controller::Webmail;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use File::Type;
+use Mojolicious::Types;
 
 use constant {
     S_USER => 'user', # Key for user name in active session
@@ -219,7 +219,7 @@ sub sendmail {
     $mail{bcc}         = $v->optional('bcc', 'not_empty')->check('mail_line')->every_param;
     $mail{reply}       = $v->optional('back_to', 'not_empty')->check('mail_line')->param;
     $mail{attach}      = $v->optional('attach', 'non_empty_ul')->upload->param;
-    $mail{attach_type} = File::Type->new()->mime_type($mail{attach}->asset->get_chunk(0, 512)) if $mail{attach};
+    $mail{attach_type} = Mojolicious::Types->new->file_type($mail{attach}->filename) if $mail{attach};
     $mail{from}        = $self->session(S_USER);
 
     if ($v->has_error) {
@@ -292,13 +292,19 @@ sub raw {
 
     my $mail = $self->users->show($auth, $mid);
 
-    if ($self->param('body')//'' eq 'html') {
-        if ($mail->{content_type} eq 'text/html') {
-            $self->render(text => $mail->{body}) ;
-        }
-        elsif ($mail->{content_type} eq 'multipart/alternative') {
-            my ($content) = grep {$_->{type} eq 'text/html'} @{ $mail->{body} };
+    my $v = $self->validation;
+    $v->optional('body')->like(qr/\w+/);
+    if ($v->has_error) {
+        return;
+    }
+
+    if (my $type = $self->param('body')) {
+        if ($mail->{content_type} =~ '^multipart/') {
+            my ($content) = grep {$_->{type} =~ $type} @{ $mail->{body} };
             $self->render(text => $content->{val});
+        }
+        elsif ($mail->{content_type} =~ $type) {
+            $self->render(text => $mail->{body}) ;
         }
         else {
             $self->res->code(404);

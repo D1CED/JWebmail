@@ -6,6 +6,8 @@ use Mojolicious::Controller;
 use Mojo::File;
 use Mojo::Util 'monkey_patch';
 
+use Config::Tiny;
+
 
 package JWebmail::Plugin::I18N2::Match {
     use Mojo::Base 'Mojolicious::Routes::Match';
@@ -83,35 +85,23 @@ sub register {
     };
     $app->helper( l => sub { my $c = shift; $i18n->($c->stash->{lang}, shift) } );
 
+    # modify incoming url
     $app->hook(before_dispatch => sub {
         my $c = shift;
         unshift @{ $c->req->url->path->parts }, ''
             unless $self->_language_loaded->{$c->req->url->path->parts->[0] || ''};
     });
 
-    #$app->hook(before_dispatch => sub { my $c = shift; $c->match(JWebmail::Plugin::I18N2::Match->new(root => $c->app->routes, _i18n2_stash => $c->stash)); });
-
-    # patch url_for
-    my $mojo_url_for = Mojolicious::Controller->can('url_for');
-    my $i18n_url_for = sub {
+    # modify generated url
+    $app->hook(before_dispatch => sub {
         my $c = shift;
-        if (ref $_[0] eq 'HASH') {
-            $_[0]->{lang} ||= $c->stash('lang');
-        }
-        elsif (ref $_[1] eq 'HASH') {
-            $_[1]->{lang} ||= $c->stash('lang');
-        }
-        elsif (@_) {
-            push @_, lang => $c->stash('lang');
-        }
-        else {
-            @_ = {lang => $c->stash('lang')};
-        }
-        return $mojo_url_for->($c, @_);
-    };
-    monkey_patch 'Mojolicious::Controller', url_for => $i18n_url_for;
+        $c->match(JWebmail::Plugin::I18N2::Match->new(
+            root         => $c->app->routes,
+            _i18n2_stash => $c->stash,
+        ));
+    });
 
-    return $app->routes->any('/:lang' => {lang => 'en'});
+    return $app->routes->any('/:lang' => {lang => $defaultLang});
 }
 
 

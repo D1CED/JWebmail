@@ -22,7 +22,9 @@ use constant {
 sub _read_json_file {
     my ($file_name) = @_;
 
-    open(my $body_file, '<', $file_name);
+    use constant PREFIX => 't/private/';
+
+    open(my $body_file, '<', PREFIX . $file_name);
     local $/;
     my $body = <$body_file>;
     close $body_file;

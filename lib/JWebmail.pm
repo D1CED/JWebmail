@@ -1,4 +1,4 @@
-package JWebmail v1.0.0;
+package JWebmail v1.1.0;
 
 use Mojo::Base 'Mojolicious';
 
@@ -20,7 +20,7 @@ sub startup {
     $self->plugin('INIConfig');
     $self->plugin('ServerSideSessionData');
     $self->plugin('Helper');
-    $self->plugin('I18N', $self->config('i18n') // {});
+    my $i18n_route = $self->plugin('I18N2', $self->config('i18n') // {});
 
     $self->secrets( [$self->config('secret')] ) if $self->config('secret');
     delete $self->config->{secret};
@@ -42,7 +42,7 @@ sub startup {
     # add helper and stash values
     $self->defaults(version => __PACKAGE__->VERSION);
 
-    $self->route();
+    $self->route($i18n_route);
 }
 
 
