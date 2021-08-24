@@ -14,6 +14,7 @@ has '_language_loaded' => sub { {} };
 
 sub register {
     my ($self, $app, $conf) = @_;
+    $conf //= {};
 
     my $i18n_log = $app->log->context('[' . __PACKAGE__ . ']');
 

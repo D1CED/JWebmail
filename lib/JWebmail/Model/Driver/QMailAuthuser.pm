@@ -4,20 +4,18 @@ use Mojo::Base -base;
 
 use IPC::Open2;
 use File::Basename 'fileparse';
-use JSON::PP;
+use JSON::PP 'decode_json';
 
 
 has 'user';
 has 'maildir';
-has 'include';
+has 'prefix'  => '';
 has qmail_dir => '/var/qmail/';
 has prog      => [fileparse(__FILE__)]->[1] . '/QMailAuthuser/Extract.pm';
 has logfile   => '/dev/null';
 
 
 sub communicate {
-    use autodie;
-
     my $self = shift;
     my %args = @_;
 
@@ -32,9 +30,7 @@ sub communicate {
             my ($user_name) = $args{user} =~ /(\w*)@/;
 
             $self->qmail_dir.'/bin/qmail-authuser'
-            . ' perl '
-            . join('', map { ' -I ' . $_ } @{ $self->include })
-            . ' -- '
+            . $self->prefix . ' '
             . join(' ', map { $_ =~ s/(['\\])/\\$1/g; "'$_'" } ($self->prog, $self->maildir, $self->user, $user_name, $args{mode}, @{$args{args}}))
             . ' 3<&0'
             . ' 2>>'.$self->logfile;
@@ -123,11 +119,11 @@ Depends on the mode
 
 =item user
 
-User name
+E-Mail address of the user
 
 =item password
 
-User password
+Corresponding e-mail user password
 
 =item challenge
 

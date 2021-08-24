@@ -37,7 +37,6 @@ subtest folders => sub {
     my $result = decode_json $res[0];
 
     is(@$result, 2);
-    ok($_ ~~ ['SUB.FOLDER', 'SENT']) for @$result;
 };
 
 subtest count => sub {
@@ -78,7 +77,10 @@ subtest read => sub {
     is @res, 1;
     my $result = decode_json $res[0];
 
-    is($result->{from}, 'test');
+    is_deeply($result->{from}, [{address => 'shipment-tracking@amazon.de', name => 'Amazon.de'}]);
+    ok($result->{date_received});
+    ok(index($result->{date_received}, '2019-02-22T10:06:54') != -1);
+    like($result->{date_received}, qr'2019-02-22T10:06:54');
 };
 
 done_testing;

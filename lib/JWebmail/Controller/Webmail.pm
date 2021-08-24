@@ -4,9 +4,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Mojolicious::Types;
 
-use constant {
-    S_USER => 'user', # Key for user name in active session
-};
+use constant S_USER => 'user'; # Key for user name in active session
 
 
 # no action has been taken, display login page
@@ -208,19 +206,20 @@ sub writemail { }
 sub sendmail {
     my $self = shift;
 
-    my %mail;
     my $v = $self->validation;
     $v->csrf_protect;
 
-    $mail{to}          = $v->required('to', 'not_empty')->check('mail_line')->every_param;
-    $mail{message}     = $v->required('body', 'not_empty')->param;
-    $mail{subject}     = $v->required('subject', 'not_empty')->param;
-    $mail{cc}          = $v->optional('cc', 'not_empty')->check('mail_line')->every_param;
-    $mail{bcc}         = $v->optional('bcc', 'not_empty')->check('mail_line')->every_param;
-    $mail{reply}       = $v->optional('back_to', 'not_empty')->check('mail_line')->param;
-    $mail{attach}      = $v->optional('attach', 'non_empty_ul')->upload->param;
+    my %mail = (
+        to      => scalar $v->required('to', 'not_empty')->check('mail_line')->every_param,
+        message => scalar $v->required('body', 'not_empty')->param,
+        subject => scalar $v->required('subject', 'not_empty')->param,
+        cc      => scalar $v->optional('cc', 'not_empty')->check('mail_line')->every_param,
+        bcc     => scalar $v->optional('bcc', 'not_empty')->check('mail_line')->every_param,
+        reply   => scalar $v->optional('back_to', 'not_empty')->check('mail_line')->param,
+        attach  => scalar $v->optional('attach', 'non_empty_ul')->upload->param,
+        from    => scalar $self->session(S_USER),
+    );
     $mail{attach_type} = Mojolicious::Types->new->file_type($mail{attach}->filename) if $mail{attach};
-    $mail{from}        = $self->session(S_USER);
 
     if ($v->has_error) {
         $self->log->debug("mail send failed. Error in @{ $v->failed }");
@@ -234,7 +233,7 @@ sub sendmail {
     my $error = $self->send_mail(\%mail);
 
     if ($error) {
-        $v->error('send'=> ['internal_error']); # make validation fail so that values are restored
+        $v->error(send => ['internal_error']); # make validation fail so that values are restored
 
         $self->render(action => 'writemail',
             warning => $self->l('error_send'),

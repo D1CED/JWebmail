@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "definitions": {
+    "count": {
+      "type": "object",
+      "properties": {
+        "new": {"type": "integer", "minimum": 0},
+        "size": {"type": "integer", "minimum": 0},
+        "count": {"type": "integer", "minimum": 0},
+        "unread": {"type": "integer", "minimum": 0}
+      },
+      "required": ["count"],
+      "additionalProperties": false
+    },
+    "folders": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "mail_addrs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "address": {"type": "string"}
+        },
+        "required": ["address"]
+      },
+      "minItems": 1
+    },
+    "mail_head": {
+      "type": "object",
+      "properties": {
+        "new": {"type": "boolean"},
+        "mid": {"type": "string"},
+        "content_type": {"type": "string"},
+        "size": {"type": "integer", "minimum": 0},
+        "date_send": {"type": "string"},
+        "date_received": {"type": "string"},
+        "cc": {"$ref": "#/definitions/mail_addrs"},
+        "bcc": {"$ref": "#/definitions/mail_addrs"},
+        "to": {"$ref": "#/definitions/mail_addrs"},
+        "from": {"$ref": "#/definitions/mail_addrs"},
+        "subject": {"type": "string"}
+      },
+      "required": ["mid"]
+    },
+    "list": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/mail_head"
+      }
+    },
+    "mail": {
+      "$ref": "#/definitions/mail_head",
+      "properties": {
+        "body": {
+          "anyOf": [
+            {"type": "string"},
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "val": {"type": "string"},
+                  "type": {"type": "string"}
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": ["body"]
+    }
+  }
+}

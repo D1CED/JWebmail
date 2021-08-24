@@ -9,10 +9,12 @@ use Fcntl ':DEFAULT', ':seek';
 use Time::HiRes 'sleep';
 
 
-use constant S_KEY => 's3d.key';
-use constant CLEANUP_FILE_NAME => 'cleanup';
-use constant LOCK_ITER => 5;
-use constant ADVANCE_ON_FAILURE => 10; # seconds to retry to acquire the lock
+use constant {
+    S_KEY              => 's3d.key',
+    CLEANUP_FILE_NAME  => 'cleanup',
+    LOCK_ITER          => 5,
+    ADVANCE_ON_FAILURE => 10, # seconds to retry to acquire the lock
+};
 
 has 'session_directory';
 has 'expiration';
@@ -21,7 +23,7 @@ has 'cleanup_interval';
 has 'next_cleanup' => 0;
 
 
-# read und potentially update file return bool
+# read and potentially update file return bool
 # needs atomic lock file
 # the file contains a single timestamp
 sub _rw_cleanup_file {
@@ -33,7 +35,7 @@ sub _rw_cleanup_file {
 
     my ($lock, $ctr, $rmlock);
     until (sysopen($lock, $lock_name, O_WRONLY | O_CREAT | O_EXCL)) {
-        die "unexpected error '$!'" unless $! eq 'File exists';
+        die "unexpected error '$!'" unless $! eq 'File exists'; # TODO: rework err check
         if ($ctr > LOCK_ITER) {
             open($lock, '<', $lock_name) or die "unexpected error '$!'";
             my $pid = <$lock>;
@@ -125,6 +127,7 @@ sub s3d {
         $data->{$key} = $val;
 
         $file->spurt(encode_json $data, "\n");
+        return;
     }
     else { # get
         return defined $key ? $data->{$key} : $data;
@@ -134,6 +137,7 @@ sub s3d {
 
 sub register {
     my ($self, $app, $conf) = @_;
+    $conf //= {};
 
     $self->session_directory(Mojo::File->new($conf->{directory} || "/tmp/" . $app->moniker));
     $self->expiration($conf->{expiration} || $app->sessions->default_expiration);

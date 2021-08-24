@@ -1,4 +1,4 @@
-package JWebmail::Model::Driver::Mock;
+package JWebmail::Model::Driver::MockJSON;
 
 use Mojo::Base -base;
 
@@ -8,7 +8,7 @@ use Mojo::JSON qw(decode_json);
 
 
 use constant {
-    VALID_USER => 'me@example.de',
+    VALID_USER => 'me@mockjson.com',
     VALID_PW   => 'vwxyz',
 };
 

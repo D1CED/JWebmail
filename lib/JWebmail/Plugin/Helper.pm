@@ -2,7 +2,7 @@ package JWebmail::Plugin::Helper;
 
 use Mojo::Base 'Mojolicious::Plugin';
 
-use List::Util qw(min max);
+use List::Util qw(all min max);
 use Mojo::Util qw(encode decode b64_encode b64_decode xml_escape);
 use POSIX qw(floor round log ceil);
 
@@ -45,8 +45,7 @@ sub filter_empty_upload {
 ### template formatting functions
 
 sub print_sizes10 {
-    my $var = shift;
-    if ($var == 0) { return '0 Byte'; }
+    my $var = shift || return '0 Byte';
 
     my $i = floor(((log($var)/log(10))+1e-5) / 3);
     my $expo = $i * 3;
@@ -64,8 +63,7 @@ sub print_sizes10 {
 
 
 sub print_sizes2 {
-    my $var = shift;
-    if ($var == 0) { return '0 Byte'; }
+    my $var = shift || return '0 Byte';
 
     my $i = floor(((log($var)/log(2))+1e-5) / 10);
     my $expo = $i * 10;
@@ -85,7 +83,10 @@ sub print_sizes2 {
 sub d { qr/([[:digit:]]{$_[0]})/ }
 
 sub parse_iso_date {
-    my @d = shift =~ m/@{[d(4).'-'.d(2).'-'.d(2).'T'.d(2).':'.d(2).':'.d(2).'Z']}/;
+    my @d = shift =~ m/@{[d(4).'-'.d(2).'-'.d(2).'T'.d(2).':'.d(2).':'.d(2)]}/;
+    if (!all { defined $_ } @d) {
+        # TODO
+    }
     return {
         year  => $d[0],
         month => $d[1],
@@ -124,8 +125,9 @@ our %MIME_Render_Subs = (
 sub mime_render {
     my ($c, $enc, $cont) = @_;
 
-    my $renderer = $MIME_Render_Subs{$enc};
-    return '' unless defined $renderer;
+    ($enc) = $enc =~ m"^(\w+/\w+);?";
+
+    my $renderer = $MIME_Render_Subs{$enc} // return '';
     return $renderer->($c, $cont);
 };
 
@@ -288,6 +290,7 @@ sub paginate {
 
 sub register {
     my ($self, $app, $conf) = @_;
+    $conf //= {};
 
     if (ref $conf->{import} eq 'ARRAY' and my @import = @{ $conf->{import} }) {
         no warnings 'experimental::smartmatch';

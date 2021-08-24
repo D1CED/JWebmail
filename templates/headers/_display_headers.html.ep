@@ -71,7 +71,7 @@
         %= ucfirst($msg->{is_multipart} ? l('yes') : l('no'));
       </td>
       <td>
-        % my $date = parse_iso_date $msg->{date};
+        % my $date = parse_iso_date $msg->{date_received};
         %= join('/', $date->{mday}, $date->{month}, $date->{year}) . " $date->{hour}:$date->{min}";
       </td>
       <td>

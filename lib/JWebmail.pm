@@ -5,8 +5,10 @@ use Mojo::Base 'Mojolicious';
 use JWebmail::Controller::Webmail;
 use JWebmail::Model::ReadMails;
 use JWebmail::Model::Driver::QMailAuthuser;
-use JWebmail::Model::Driver::Mock;
 use JWebmail::Model::WriteMails;
+
+use JWebmail::Model::Driver::MockJSON;
+use JWebmail::Model::Driver::MockMaildir;
 
 
 sub startup {
@@ -14,32 +16,38 @@ sub startup {
 
     $self->moniker('jwebmail');
 
+    my $mode = $self->mode;
+    $self->log->path($self->home->child('log', "$mode.log"));
+
     # load plugins
     push @{$self->plugins->namespaces}, 'JWebmail::Plugin';
 
     $self->plugin('INIConfig');
     $self->plugin('ServerSideSessionData');
     $self->plugin('Helper');
-    my $i18n_route = $self->plugin('I18N2', $self->config('i18n') // {});
+    my $i18n_route = $self->plugin('I18N2', $self->config('i18n'));
 
     $self->secrets( [$self->config('secret')] ) if $self->config('secret');
     delete $self->config->{secret};
 
     # initialize models
-    $self->helper(users => sub {
-        state $x = JWebmail::Model::ReadMails->new(
-            driver => $self->config->{development}{use_read_mock}
-                      ? JWebmail::Model::Driver::Mock->new()
-                      : JWebmail::Model::Driver::QMailAuthuser->new(
-                            logfile => $self->home->child('log', 'extract.log'),
-                            %{ $self->config->{model}{read}{driver} // {} },
-                        )
-        );
-    });
+    no warnings "experimental::smartmatch";
+    my $driver = do {
+        given ($self->config->{development}{use_read_mock}) {
+            when (/^json/)    { JWebmail::Model::Driver::MockJSON->new() }
+            when (/^maildir/) { JWebmail::Model::Driver::MockMaildir->new(extractor => 'rust') }
+            default { 
+                JWebmail::Model::Driver::QMailAuthuser->new(
+                    logfile => $self->home->child('log', 'extract.log'),
+                    %{ $self->config->{model}{read}{driver} // {} })
+            }
+        }
+    };
+    my $read_mails = JWebmail::Model::ReadMails->new(driver => $driver);
+    $self->helper(users => sub { $read_mails });
     $self->helper(send_mail => sub { my ($c, $mail) = @_; JWebmail::Model::WriteMails::sendmail($mail) });
     $JWebmail::Model::WriteMails::Block_Writes = 1 if $self->config->{development}{block_writes};
 
-    # add helper and stash values
     $self->defaults(version => __PACKAGE__->VERSION);
 
     $self->route($i18n_route);
@@ -49,7 +57,7 @@ sub startup {
 sub route {
     my $self = shift;
 
-    my $r = shift || $self->routes;
+    my $r = shift // $self->routes;
 
     $r->get('/' => 'noaction')->to('Webmail#noaction');
     $r->get('/about')->to('Webmail#about');

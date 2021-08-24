@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 package JWebmail::Model::Driver::QMailAuthuser::Extract;
 
 use v5.18;
@@ -8,16 +9,15 @@ use utf8;
 use POSIX ();
 use JSON::PP;
 use Carp;
-use Encode v2.88 qw(decode);
+use List::Util 'min';
+use Encode v2.88 'decode';
 
 use open IO => ':encoding(UTF-8)', ':std';
 no warnings 'experimental::smartmatch';
 
 use Mail::Box::Manager;
 
-use constant {
-    ROOT_MAILDIR => '.',
-};
+use constant ROOT_MAILDIR => '.';
 
 
 sub main {
@@ -109,19 +109,18 @@ sub list {
     my $sref = _sort_mails($sortby);
     my @msgs = $f->messages;
     @msgs = sort { &$sref } @msgs;
-    @msgs = @msgs[$start..$end];
+    @msgs = @msgs[$start..min($#msgs, $end)];
 
     my @msgs2;
 
     for my $msg (@msgs) {
         my $msg2 = {
-            #subject => scalar decode_mimewords($msg->subject),
             subject => decode('MIME-Header', $msg->subject),
             from => _addresses($msg->from),
             to => _addresses($msg->to),
             cc => _addresses($msg->cc),
             bcc => _addresses($msg->bcc),
-            date => _iso8601_utc($msg->timestamp),
+            date_received => _iso8601_utc($msg->timestamp),
             size => $msg->size,
             content_type => ''. $msg->contentType,
             mid => $msg->messageId,
@@ -175,7 +174,7 @@ sub read_mail {
         to => _addresses($msg->to),
         cc => _addresses($msg->cc),
         bcc => _addresses($msg->bcc),
-        date => _iso8601_utc($msg->timestamp),
+        date_received => _iso8601_utc($msg->timestamp),
         size => $msg->size,
         content_type => ''. $msg->contentType,
         body => do {
@@ -191,9 +190,7 @@ sub read_mail {
 
 
 sub search {
-    my $f = shift;
-    my $search_pattern = shift;
-    my $folder = shift;
+    my ($f, $search_pattern, $folder) = @_;
     $folder = ".$folder";
 
     $f = $f->openSubFolder($folder) if $folder ne ROOT_MAILDIR;
@@ -214,7 +211,7 @@ sub search {
             to => _addresses($msg->to),
             cc => _addresses($msg->cc),
             bcc => _addresses($msg->bcc),
-            date => _iso8601_utc($msg->timestamp),
+            date_received => _iso8601_utc($msg->timestamp),
             size => $msg->size,
             content_type => ''. $msg->contentType,
             mid => $msg->messageId,
@@ -229,7 +226,7 @@ sub search {
 sub folders {
     my $f = shift;
 
-    return [grep { $_ =~ m/^\./ && $_ =~ s/\.// && 1  } $f->listSubFolders];
+    return [grep { $_ =~ m/^\./ && $_ =~ s/\.// } $f->listSubFolders];
 }
 
 

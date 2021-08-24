@@ -5,16 +5,16 @@ use utf8;
 use Test::More;
 use Test::Mojo;
 
-use JWebmail::Model::Driver::Mock;
+use JWebmail::Model::Driver::MockJSON;
 
 
 use constant DEFAULT_LANGUAGE => 'en';
-my $user = JWebmail::Model::Driver::Mock::VALID_USER;
-my $pw   = JWebmail::Model::Driver::Mock::VALID_PW;
+my $user = JWebmail::Model::Driver::MockJSON::VALID_USER;
+my $pw   = JWebmail::Model::Driver::MockJSON::VALID_PW;
 
 
 my $t = Test::Mojo->new('JWebmail', {
-    development => { use_read_mock => 1, block_writes => 1 },
+    development => { use_read_mock => 'json', block_writes => 1 },
     i18n => { default_language => 'en' },
 });
 

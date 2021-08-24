@@ -38,7 +38,7 @@ sub read_headers_for {
         password => $auth->password,
         challenge => $auth->challenge,
         mode => 'list',
-        args => [$start || '0', $end || '0', $sort || 'date', $folder || ''],
+        args => [$start // 0, $end // 0, $sort // 'date', $folder // ''],
     );
     die "connection error: $resp->{error}" if $rc;
     return $resp;
@@ -175,6 +175,9 @@ Checks user name and password.
 
 Provides bundeled information on a subset of mails of a mailbox.
 Can be sorted and of varying size.
+
+Arguments:
+  start..end   inclusive 0 based range
 
 =head2 count
 

@@ -24,8 +24,7 @@ sub _build_mail {
         },
         body_str => $mail->{message},
     );
-    my $attach;
-    $attach = Email::MIME->create(
+    my $attach = Email::MIME->create(
         attributes => {
             content_type => $mail->{attach_type},
             encoding     => 'base64',
@@ -40,7 +39,7 @@ sub _build_mail {
             Subject    => $mail->{subject},
             'X-Mailer' => 'JWebmail',
         ],
-        parts => [$text_part, $attach || () ],
+        parts => [ $text_part, $attach // () ],
     );
     $email->header_str_set(CC => @{$mail->{cc}}) if $mail->{cc};
     $email->header_str_set('Reply-To' => $mail->{reply}) if $mail->{reply};

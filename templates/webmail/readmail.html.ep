@@ -18,7 +18,7 @@
 %= $mail_fmt->('cc', $msg->{cc}) if !ref $msg->{cc} || @{ $msg->{cc} };
 %= $mail_fmt->('bcc', $msg->{bcc}) if !ref $msg->{bcc} || @{ $msg->{cc} };
   <dt> <%= uc l 'date' %> </dt>
-  <dd> <%= $msg->{date} %> </dd>
+  <dd> <%= $msg->{date_received} %> </dd>
   <dt> <%= uc l 'size' %> </dt>
   <dd> <%= print_sizes10 $msg->{size} %> </dd>
   <dt> <%= uc l 'content-type' %> </dt>
