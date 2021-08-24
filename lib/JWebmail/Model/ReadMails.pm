@@ -138,7 +138,7 @@ __END__
 
 =head1 NAME
 
-ReadMails - Read recieved mails
+ReadMails - Read received mails
 
 =head1 SYNOPSIS
 

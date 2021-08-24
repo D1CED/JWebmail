@@ -8,15 +8,15 @@ use Mojo::JSON qw(decode_json);
 
 
 use constant {
-    VALID_USER => 'me@mockjson.com',
+    VALID_USER => 'mockjson@example.com',
     VALID_PW   => 'vwxyz',
 };
 
 use constant {
-        LIST_START  => 0,
-        LIST_END    => 1,
-        LIST_SORT   => 2,
-        LIST_FOLDER => 3,
+    LIST_START  => 0,
+    LIST_END    => 1,
+    LIST_SORT   => 2,
+    LIST_FOLDER => 3,
 };
 
 sub _read_json_file {
@@ -63,6 +63,7 @@ sub communicate {
                 my $sort_by = $args{args}->[LIST_SORT];
                 my $rev = $sort_by !~ m/^![[:lower:]]+/ ? 1 : -1;
                 $sort_by =~ s/!//;
+                $sort_by = "date_received" if $sort_by eq "date";
                 return ($a->{$sort_by} cmp $b->{$sort_by}) * $rev;
             };
             return ([sort { &$s } @{ $self->list_reply }[$args{args}->[LIST_START]..$args{args}->[LIST_END]]], 0);
