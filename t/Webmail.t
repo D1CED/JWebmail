@@ -15,7 +15,7 @@ my $pw   = JWebmail::Model::Driver::MockJSON::VALID_PW;
 
 my $t = Test::Mojo->new('JWebmail', {
     development => { use_read_mock => 'json', block_writes => 1 },
-    i18n => { default_language => 'en' },
+    i18n        => { default_language => DEFAULT_LANGUAGE },
 });
 
 $t->get_ok('/')->status_is(200);

@@ -115,16 +115,16 @@ sub list {
 
     for my $msg (@msgs) {
         my $msg2 = {
-            subject => decode('MIME-Header', $msg->subject),
-            from => _addresses($msg->from),
-            to => _addresses($msg->to),
-            cc => _addresses($msg->cc),
-            bcc => _addresses($msg->bcc),
+            subject       => decode('MIME-Header', $msg->subject),
+            from          => _addresses($msg->from),
+            to            => _addresses($msg->to),
+            cc            => _addresses($msg->cc),
+            bcc           => _addresses($msg->bcc),
             date_received => _iso8601_utc($msg->timestamp),
-            size => $msg->size,
-            content_type => ''. $msg->contentType,
-            mid => $msg->messageId,
-            new => $msg->label('seen'),
+            size          => $msg->size,
+            content_type  => ''. $msg->contentType,
+            mid           => $msg->messageId,
+            new           => $msg->label('seen'),
         };
         push @msgs2, $msg2;
     }
@@ -169,15 +169,15 @@ sub read_mail {
     my $msg = $folder->find($mid);
     return {error => 'no such message', mid => $mid} unless $msg;
     return {
-        subject => decode('MIME-Header', $msg->subject),
-        from => _addresses($msg->from),
-        to => _addresses($msg->to),
-        cc => _addresses($msg->cc),
-        bcc => _addresses($msg->bcc),
+        subject       => decode('MIME-Header', $msg->subject),
+        from          => _addresses($msg->from),
+        to            => _addresses($msg->to),
+        cc            => _addresses($msg->cc),
+        bcc           => _addresses($msg->bcc),
         date_received => _iso8601_utc($msg->timestamp),
-        size => $msg->size,
-        content_type => ''. $msg->contentType,
-        body => do {
+        size          => $msg->size,
+        content_type  => ''. $msg->contentType,
+        body          => do {
             if ($msg->isMultipart) {
                 [map {{type => ''. $_->contentType, val => '' . $_->decoded}} $msg->body->parts]
             }
@@ -206,15 +206,15 @@ sub search {
     my @msgs2;
     for my $msg (@msgs) {
         my $msg2 = {
-            subject => decode('MIME-Header', $msg->subject),
-            from => _addresses($msg->from),
-            to => _addresses($msg->to),
-            cc => _addresses($msg->cc),
-            bcc => _addresses($msg->bcc),
+            subject       => decode('MIME-Header', $msg->subject),
+            from          => _addresses($msg->from),
+            to            => _addresses($msg->to),
+            cc            => _addresses($msg->cc),
+            bcc           => _addresses($msg->bcc),
             date_received => _iso8601_utc($msg->timestamp),
-            size => $msg->size,
-            content_type => ''. $msg->contentType,
-            mid => $msg->messageId,
+            size          => $msg->size,
+            content_type  => ''. $msg->contentType,
+            mid           => $msg->messageId,
         };
         push @msgs2, $msg2;
     }
