@@ -298,11 +298,11 @@ sub raw {
     }
 
     if (my $type = $self->param('body')) {
-        if ($mail->{content_type} =~ '^multipart/') {
-            my ($content) = grep {$_->{type} =~ $type} @{ $mail->{body} };
-            $self->render(text => $content->{val});
+        if ($mail->{head}{content_type} =~ '^multipart/') {
+            my ($content) = grep {$_->{head}{content_type} =~ $type} @{ $mail->{body} };
+            $self->render(text => $content->{body});
         }
-        elsif ($mail->{content_type} =~ $type) {
+        elsif ($mail->{head}{content_type} =~ $type) {
             $self->render(text => $mail->{body}) ;
         }
         else {

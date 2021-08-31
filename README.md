@@ -7,12 +7,12 @@ oMail has not seen much progress in the last two decades
 so my <jannis@fehcom.de> goal is to bring it up to date.
 OMail was tied to qmail. JWebmail is not so tightly bound.
 
-## This includes:
+This includes:
 - Using a perl web framework and leave the deprecated CGI behind.
   You can still use it in a cgi setup if you like but you now
   have the option of plack/psgi and fcgi as well as the
   build in server hypnotoad.
-- Set up a MVC architecture instead of spaghetti.
+- Set up a MVC architecture instead of a single file.
 - Improve security by only running a small part of the
   model with elevated privileges.
 - Make sure it works well with sqmail and its authuser
@@ -20,6 +20,7 @@ OMail was tied to qmail. JWebmail is not so tightly bound.
   (currently not supported but adding more should be easy).
   Maybe I even add a POP or IMAP based backends instead
   of reading them from disk.
+
 
 ## License
 JWebmail is available under the GNU General Public License
@@ -39,6 +40,7 @@ an external web server.
 
 Posts
 -----
+
 * Complain about IPC::Open2 ignoring 'open' pragma
 * Complain about undef references causing errors, and non-fine granular switch no strict 'refs'
 * Thank for perldoc.org
@@ -46,6 +48,7 @@ Posts
 
 I18N patch url_for
 ------------------
+
 I have taken the monkey patching approach that was taken by Mojolicious::Plugin::I18N.
 I used `can` to get the old method for looser coupling and used the Mojo::Util::monkey_patch
 instead of manually doing it. This is probably overkill.
@@ -62,6 +65,7 @@ One issue when taking the Match approach is that it needs knowledge of the stash
 values which can cause cyclic references.
 
 I thought of three approaches injecting the modified Match instance into the class:
+
 1. Extending the Mojolicious::Controller and overriding the new method.
    This has the issue that inheritance is static but one can use Roles that
    are dynamically consumed.
@@ -79,27 +83,28 @@ I am now using a global route containing the language after the changes to
 matching have been published. No need to monkey_patch and it works well enough.
 
 
-Concepts
---------
-- Router
-- Configuration
-- Middleware (auth)
-- Controller/Handler
-- Templates
-- Template helpers
-- i18n (url rewriting)
-- Sessions (server side)
-- Flash, maybe
-- Pagination
-- Validation
-- Logging
-- Debug printing
-- Development server
-- MIME handling
+## Concepts
+
+    Router                        Mojolicious build-in 
+    Configuration                 INI via Config::Tiny
+    Middleware (auth)             Mojo under
+    Controller/Handler            Mojolicious::Controller
+    Templates                     Mojo format ep
+    Template helpers              Mojolicious->helper
+    i18n (url rewriting)          see 'I18N patch url_for'
+    Sessions (server side)        self developed plug-in
+    Flash                         Mojo
+    Pagination                    self developed
+    Validation                    Mojo
+    Logging                       Mojo::Log
+    Debug printing                Data::Dumper
+    Development server            Mojo
+    MIME handling
 
 
 Dependencies
 ------------
+
 - M & V
   - Mojolicious
   - Config::Tiny
@@ -107,3 +112,15 @@ Dependencies
 - C
   - Mail::Box::Manager
   - Email::MIME
+
+
+## Architecture
+
+    Webserver <--> Application
+                     Server
+                       |
+                   Application <--> Extractor
+
+The Webserver acts as a proxy to the Application Server.
+
+The Extractor is a stateless process that reads mails from a source.

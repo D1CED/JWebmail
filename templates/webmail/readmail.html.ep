@@ -12,25 +12,25 @@
 
 <dl id=show-head>
   <dt> <%= uc l 'subject' %> </dt>
-  <dd> <%= $msg->{subject} %> </dd>
-%= $mail_fmt->('from', $msg->{from});
-%= $mail_fmt->('to', $msg->{to});
-%= $mail_fmt->('cc', $msg->{cc}) if !ref $msg->{cc} || @{ $msg->{cc} };
-%= $mail_fmt->('bcc', $msg->{bcc}) if !ref $msg->{bcc} || @{ $msg->{cc} };
+  <dd> <%= $msg->{head}{subject} %> </dd>
+%= $mail_fmt->('from', $msg->{head}{from});
+%= $mail_fmt->('to', $msg->{head}{to});
+%= $mail_fmt->('cc', $msg->{head}{cc}) if !ref $msg->{head}{cc} || @{ $msg->{head}{cc} };
+%= $mail_fmt->('bcc', $msg->{head}{bcc}) if !ref $msg->{head}{bcc} || @{ $msg->{head}{bcc} };
   <dt> <%= uc l 'date' %> </dt>
-  <dd> <%= $msg->{date_received} %> </dd>
+  <dd> <%= $msg->{head}{date} %> </dd>
   <dt> <%= uc l 'size' %> </dt>
   <dd> <%= print_sizes10 $msg->{size} %> </dd>
   <dt> <%= uc l 'content-type' %> </dt>
-  <dd> <%= $msg->{content_type} %> </dd>
+  <dd> <%= $msg->{head}{content_type} %> </dd>
 </dl>
 
 % my $body = $msg->{body};
 
-% if ($msg->{content_type} eq 'multipart/alternative') {
+% if ($msg->{head}{content_type} eq 'multipart/alternative') {
 %   for (reverse @$body) {
       <div class=show-body>
-%       my $x = mime_render($_->{type}, $_->{val});
+%       my $x = mime_render($_->{head}{content_type}, $_->{body});
 %==     $x;
       </div>
 %       last if $x;
@@ -39,13 +39,13 @@
 % elsif (ref $body eq 'HASH') {
 %   for (%$body) {
       <div class=show-body>
-%==     mime_render($_->{type}, $_->{val});
+%==     mime_render($_->{head}{content_type}, $_->{body});
       </div>
 %   }
 % }
 % else {
     <div class=show-body>
-%==   mime_render($msg->{content_type}, $body);
+%==   mime_render($msg->{head}{content_type}, $body);
     </div>
 % }
 

@@ -12,7 +12,7 @@ use Carp;
 use List::Util 'min';
 use Encode v2.88 'decode';
 
-use open IO => ':encoding(UTF-8)', ':std';
+#use open IO => ':encoding(UTF-8)', ':std';
 no warnings 'experimental::smartmatch';
 
 use Mail::Box::Manager;
@@ -22,9 +22,9 @@ use constant ROOT_MAILDIR => '.';
 
 sub main {
     my ($maildir) = shift(@ARGV) =~ m/(.*)/;
-    my ($su) = shift(@ARGV) =~ m/(.*)/;
-    my ($user) = shift(@ARGV) =~ m/([[:alpha:]]+)/;
-    my $mode = shift @ARGV; _ok($mode =~ m/([[:alpha:]-]{1,20})/);
+    my ($su)      = shift(@ARGV) =~ m/(.*)/;
+    my ($user)    = shift(@ARGV) =~ m/([[:alpha:]]+)/;
+    my $mode      = shift @ARGV; _ok($mode =~ m/([[:alpha:]-]{1,20})/);
     my @args = @ARGV;
 
     delete $ENV{PATH};
@@ -57,7 +57,7 @@ sub main {
     };
     $folder->close;
 
-    print encode_json $reply;
+    print(encode_json $reply);
     if (ref $reply eq 'HASH' && $reply->{error}) {
         exit 3;
     }
@@ -115,16 +115,18 @@ sub list {
 
     for my $msg (@msgs) {
         my $msg2 = {
-            subject       => decode('MIME-Header', $msg->subject),
-            from          => _addresses($msg->from),
-            to            => _addresses($msg->to),
-            cc            => _addresses($msg->cc),
-            bcc           => _addresses($msg->bcc),
-            date_received => _iso8601_utc($msg->timestamp),
-            size          => $msg->size,
-            content_type  => ''. $msg->contentType,
-            mid           => $msg->messageId,
-            new           => $msg->label('seen'),
+            mid  => $msg->messageId,
+            size => $msg->size,
+            new  => $msg->label('seen'),
+            head => {
+                subject       => decode('MIME-Header', $msg->subject),
+                from          => _addresses($msg->from),
+                to            => _addresses($msg->to),
+                cc            => _addresses($msg->cc),
+                bcc           => _addresses($msg->bcc),
+                date          => _iso8601_utc($msg->timestamp),
+                content_type  => ''.$msg->contentType,
+            },
         };
         push @msgs2, $msg2;
     }
@@ -165,19 +167,21 @@ sub _addresses {
 
 sub read_mail {
     my ($folder, $mid) = @_;
-    
+
     my $msg = $folder->find($mid);
     return {error => 'no such message', mid => $mid} unless $msg;
     return {
-        subject       => decode('MIME-Header', $msg->subject),
-        from          => _addresses($msg->from),
-        to            => _addresses($msg->to),
-        cc            => _addresses($msg->cc),
-        bcc           => _addresses($msg->bcc),
-        date_received => _iso8601_utc($msg->timestamp),
-        size          => $msg->size,
-        content_type  => ''. $msg->contentType,
-        body          => do {
+        size => $msg->size,
+        head => {
+            subject      => decode('MIME-Header', $msg->subject),
+            from         => _addresses($msg->from),
+            to           => _addresses($msg->to),
+            cc           => _addresses($msg->cc),
+            bcc          => _addresses($msg->bcc),
+            date         => _iso8601_utc($msg->timestamp),
+            content_type => ''. $msg->contentType,
+        },
+        body => do {
             if ($msg->isMultipart) {
                 [map {{type => ''. $_->contentType, val => '' . $_->decoded}} $msg->body->parts]
             }
@@ -200,21 +204,23 @@ sub search {
 
         return scalar(grep { $_->decoded =~ /$search_pattern/ || (decode('MIME-Header', $_->subject)) =~ /$search_pattern/ } $m->body->parts)
             if $m->isMultipart;
-        $m->body->decoded =~ /$search_pattern/ ||(decode('MIME-Header', $m->subject)) =~ /$search_pattern/;
+        $m->body->decoded =~ /$search_pattern/ || (decode('MIME-Header', $m->subject)) =~ /$search_pattern/;
     });
 
     my @msgs2;
     for my $msg (@msgs) {
         my $msg2 = {
-            subject       => decode('MIME-Header', $msg->subject),
-            from          => _addresses($msg->from),
-            to            => _addresses($msg->to),
-            cc            => _addresses($msg->cc),
-            bcc           => _addresses($msg->bcc),
-            date_received => _iso8601_utc($msg->timestamp),
-            size          => $msg->size,
-            content_type  => ''. $msg->contentType,
-            mid           => $msg->messageId,
+            size => $msg->size,
+            mid  => $msg->messageId,
+            head => {
+                subject      => decode('MIME-Header', $msg->subject),
+                from         => _addresses($msg->from),
+                to           => _addresses($msg->to),
+                cc           => _addresses($msg->cc),
+                bcc          => _addresses($msg->bcc),
+                date         => _iso8601_utc($msg->timestamp),
+                content_type => ''. $msg->contentType,
+            },
         };
         push @msgs2, $msg2;
     }

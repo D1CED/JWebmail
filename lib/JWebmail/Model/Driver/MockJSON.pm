@@ -62,9 +62,8 @@ sub communicate {
             my $s = sub {
                 my $sort_by = $args{args}->[LIST_SORT];
                 my $rev = $sort_by !~ m/^![[:lower:]]+/ ? 1 : -1;
-                $sort_by =~ s/!//;
-                $sort_by = "date_received" if $sort_by eq "date";
-                return ($a->{$sort_by} cmp $b->{$sort_by}) * $rev;
+                $sort_by =~ s/^!//;
+                return (($a->{$sort_by}||$a->{head}{$sort_by}) cmp ($b->{$sort_by}||$b->{head}{$sort_by})) * $rev;
             };
             return ([sort { &$s } @{ $self->list_reply }[$args{args}->[LIST_START]..$args{args}->[LIST_END]]], 0);
         }

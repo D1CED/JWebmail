@@ -33,47 +33,51 @@
     "mail_head": {
       "type": "object",
       "properties": {
-        "new": {"type": "boolean"},
-        "mid": {"type": "string"},
         "content_type": {"type": "string"},
-        "size": {"type": "integer", "minimum": 0},
-        "date_send": {"type": "string"},
-        "date_received": {"type": "string"},
+        "date": {"type": "string"},
         "cc": {"$ref": "#/definitions/mail_addrs"},
         "bcc": {"$ref": "#/definitions/mail_addrs"},
         "to": {"$ref": "#/definitions/mail_addrs"},
         "from": {"$ref": "#/definitions/mail_addrs"},
         "subject": {"type": "string"}
       },
-      "required": ["mid"]
+      "required": ["date", "from"]
     },
-    "list": {
+    "head_list": {
       "type": "array",
       "items": {
         "$ref": "#/definitions/mail_head"
       }
     },
-    "mail": {
-      "$ref": "#/definitions/mail_head",
-      "properties": {
-        "body": {
-          "anyOf": [
-            {"type": "string"},
-            {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "type": "object",
-                "properties": {
-                  "val": {"type": "string"},
-                  "type": {"type": "string"}
-                }
-              }
+    "mail_body": {
+      "anyOf": [
+        {"type": "string"},
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "head": {"$ref": "#/definitions/mail_head"},
+              "body": {"$ref": "#/definitions/mail_body"}
             }
-          ]
+          }
+        },
+        {
+          "ref": "#/definitions/mail"
         }
+      ]
+    },
+    "mail": {
+      "type": "object",
+      "properties": {
+        "new": {"type": "boolean"},
+        "mid": {"type": "string"},
+        "size": {"type": "integer", "minimum": 0},
+        "head": {"$ref": "#/definitions/mail_head"},
+        "body": {"$ref": "#/definitions/mail_body"}
       },
-      "required": ["body"]
+      "required": ["mid"]
     }
   }
 }

@@ -71,14 +71,14 @@
         %= ucfirst($msg->{is_multipart} ? l('yes') : l('no'));
       </td>
       <td>
-        % my $date = parse_iso_date $msg->{date_received};
+        % my $date = parse_iso_date $msg->{head}{date};
         %= join('/', $date->{mday}, $date->{month}, $date->{year}) . " $date->{hour}:$date->{min}";
       </td>
       <td>
-        %= $msg->{from}->[0]->{name} || $msg->{from}->[0]->{email};
+        %= $msg->{head}{from}[0]{name} || $msg->{head}{from}[0]{email};
       </td>
       <td>
-        <a href="<%= url_for('read', id => $msg->{mid}) %>"> <%= $msg->{subject} || '_' %> </a>
+        <a href="<%= url_for('read', id => $msg->{mid}) %>"> <%= $msg->{head}{subject} || '_' %> </a>
       </td>
       <td>
         %= print_sizes10 $msg->{size};
