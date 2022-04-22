@@ -11,7 +11,7 @@ lib/JWebmail/Plugin/INIConfig.pm
 lib/JWebmail/Plugin/I18N.pm
 lib/JWebmail/Plugin/I18N2.pm
 lib/JWebmail/Plugin/ServerSideSessionData.pm
-README
+README.md
 LICENSE
 lang/de.lang
 lang/en.lang
@@ -20,7 +20,6 @@ t/Webmail.t
 t/INI.t
 t/Helper.t
 script/jwebmail
-CREDITS
 MANIFEST
 public/style.css
 templates/headers/_display_top_nav.html.ep

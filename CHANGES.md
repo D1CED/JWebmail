@@ -1,0 +1,176 @@
+Past and Upcoming Changes
+=========================
+
+v1.0.0 release plan
+-------------------
+- [x] consider renaming, relicensing
+  - [x] License
+    - [x] GPLv3+ and enter copyright info
+    - [ ] Maybe the translation/documentation can be made available under a
+          different license
+    - [ ] may relicense this under the AGPL.
+  - [x] Rename
+    - [x] JWebmail
+- [x] make github ready
+  - [x] remove sensitive files (gitignore)
+  - [x] add git vcs
+  - [x] remove part of the english translation
+- [ ] check legal requirements
+- [x] BUG: home not displaying
+- [x] show new messages per folder
+- [x] BUG: empty folder not displaying correctly
+- [x] better documentation
+  - [x] document i18n snippets
+  - [x] cleanup comments
+  - [x] list functionality for ReadMails#communicate
+  - [x] OMail 
+  - [x] OMail::Helper
+  - [x] OMail::Controller::All
+  - [x] OMail::Plugin::I18N
+  - [x] OMail::Plugin::INIConfig
+  - [x] OMail::Plugin::ServerSideSessionData
+  - [x] OMail::Model::WriteMails
+  - [x] OMail::Model::ReadMails
+  - [x] OMail::Model::Driver::QMailAuthuser
+  - [x] OMail::Model::Driver::QMailAuthuser::Extract
+- [x] better pagination
+  - [x] BUG: pagination forward -> backward is shifting by 1
+        (page start needs to be decremented)
+  - [x] move out to helper
+  - [x] more generic names
+- [x] advance ini config plugin
+  - [x] set global section to global scope 
+  - [x] introduce arrays
+  - [x] make nesting sections more explicit
+- [x] write more tests
+  - [x] test pagination
+  - [x] test mail_line
+  - [x] test for ini parser
+  - [x] basic test for application
+- [x] improve i18n
+  - [x] german translation
+  - [x] look into i18n configuration
+  - [x] remove TXT alias
+- [x] more configuration (for model)
+  - [x] disable cram
+  - [x] select mock read model
+  - [x] lazy init for mock model
+  - [x] add switch disabling message send
+  - [x] Extract: user to switch to
+  - [x] Extract: adjustable maildir directory
+- [x] read secret from config file
+- [x] Extract: configurable perl lib
+- [x] Extract: encoding issues
+- [x] improve session data security
+  - [x] use a server side cookie implementation
+  - [x] use a one time pad
+  - [x] resolve server/client session duration issues
+  - [x] use cryptographically secure random data
+  - [x] hide password length
+- [x] handle empty folders
+- [x] logging support for Extract.pm
+- [x] true perl 5.16 support
+- [x] cpan build and deploy script
+- [x] remove prefs
+- [x] file upload for attachment
+  - [x] file type detection
+  - [x] move WriteMails from Email::Simple to Email::MIME
+- [x] configuration as plugin (Mojo::Plugin::Config)
+- [x] model as helpers, initialized in startup
+- [x] send
+  - [x] multiple mails for cc etc.
+  - [ ] content-transfer encoding, research (currently 8bit)
+- [x] better design for send and read
+  - [x] send 
+  - [x] read
+- [x] sandbox html mails
+- [x] i18n as ini files
+- [x] rework mail folders
+- [x] rewrite about
+- [x] search in subject
+
+Current v1.1.0
+--------------
+- [ ] From v1.0.0
+  - [ ] Maybe the translation/documentation can be made available under a
+        different license
+  - [ ] may relicense this under the AGPL.
+  - [ ] research content-transfer encoding for sending (currently 8bit)
+  - [ ] check legal requirements (cookies and DSGVO)
+- [x] separate development and production configuration
+- [x] better back buttons
+  - [x] writemail
+  - [x] read mail
+- [x] improve server side session cleanup process coordination
+- [x] consider using Crypt::URandom instead of Crypt::Random
+- [x] factor out date format function
+- [x] add a delete session function for s3d, maybe
+  - [x] simply remove key from cookie
+- [x] add actions script
+- [ ] repurpose status field in displayheader
+  - [x] currently just renamed
+- [ ] advance ini config plugin
+  - [ ] allow non-leaf nodes to be arrays
+  - [ ] allow quotes
+  - [ ] allow continuation over multiple lines
+  - [ ] warn about overrides
+  - [ ] add template support, maybe
+- [ ] improve i18n
+  - [ ] add localization of dates and time
+- [ ] improve performance, consider alternatives to Extract.pm
+  - [ ] based on Maildir::Light
+  - [ ] reimplementation in Rust
+- [x] refactor I18N plugin to allow independent provider
+- [ ] refactor driver into a role
+- [ ] merge read and row (with content type)
+- [ ] fix tests
+- [ ] consider using more mojo functions
+  - [x] use Mojolicious::Types to replace File::Type
+  - [x] Helper
+  - [ ] QMailAuthuser
+- [ ] moving mails to other folders
+  - [ ] creating new folders
+  - [ ] backend
+- [ ] specify protocol for backend interaction
+- [ ] cleanup README
+
+Future
+------
+- [ ] INV: wrong subject being shown
+- [ ] INV: new mails are not highlighted
+- [ ] INV: displayheaders table does not fill outer container
+- [ ] consider using more mojo functions
+  - [ ] base64
+  - [ ] encoding
+  - [ ] json
+  - [ ] filepaths
+  - [ ] dump
+  - [ ] mail?
+- [ ] create base configuration
+- [ ] improve performance
+  - [ ] async read for extract
+    - [x] async version of driver
+    - [x] async version of model
+    - [ ] async version of controller
+  - [ ] async wait for send
+  - [ ] add wait_for_child to event loop
+- [ ] add more mime types to read
+  - [ ] jpeg
+  - [ ] png
+  - [ ] gif
+- [ ] better pagination
+  - [ ] merge with partial templates, maybe
+- [ ] add config validation
+- [ ] click on sender to answer
+- [ ] mobile optimize
+- [ ] download mail and attachments
+- [ ] cleanup css
+- [ ] allow multiple attachments
+- [ ] add mails to Sent folder
+- [ ] smtp send model, maybe
+- [ ] pop read model, maybe
+- [ ] add icons for navigation
+- [ ] allow changing password
+- [ ] think about forgot password feature
+- [ ] address book support
+  - [ ] add links on email addresses in header : click = add into addressbook

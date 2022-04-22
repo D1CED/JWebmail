@@ -69,8 +69,10 @@ sub sendmail {
     push @recipients, @{ $mail->{cc} } if $mail->{cc};
     push @recipients, @{ $mail->{bcc} } if $mail->{bcc};
 
-    say $mime if $Block_Writes;
-    return 1 if $Block_Writes;
+    if ($Block_Writes) {
+        say $mime;
+        return 1;
+    }
 
     return _send($mime, @recipients);
 }
